@@ -31,6 +31,8 @@
     } catch (e) { /* analytics must never break the page */ }
   }
 
+  window.hydragearTrack = track;
+
   function asinFromUrl(url) {
     var m = /\/dp\/([A-Z0-9]{10})/i.exec(url || '');
     return m ? m[1].toUpperCase() : null;
@@ -350,14 +352,6 @@
   products.forEach(function (p) {
     var wrap = p.card.querySelector('.product-image-wrapper');
     var img = p.card.querySelector('.product-image');
-
-    // The whole product photo opens the Amazon listing, like the button does
-    if (wrap) {
-      wrap.addEventListener('click', function (e) {
-        if (e.target.closest('a')) return;
-        p.btn.click();
-      });
-    }
 
     // Soft shimmer + fade-in while product photos load
     if (img && !img.complete) {

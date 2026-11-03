@@ -318,6 +318,29 @@ Every page also loads `css/hydragear-enhance.css` and `js/hydragear-enhance.js` 
 
 Amazon links use the clean `https://www.amazon.com/dp/<ASIN>` form (no search/session tracking params), which also opens the Amazon app on phones.
 
+### Product pop-ups and bottle-matched colours
+
+`index.html` and `shop.html` also load `js/hydragear-products.js` (the product catalog) and `js/hydragear-pdp.js`:
+
+- **Product detail pop-up.** Opens when a shopper clicks a product card or its **Learn more** link. It shows a photo gallery, price, highlights, description, an "About this item" list and a **Shop on Amazon** button that goes straight to the listing. On phones it slides up as a bottom sheet (swipe down to close, swipe sideways for the next bottle). The **Shop Now** button on each card still goes straight to Amazon.
+- **Deep links.** `shop.html#juno-tumbler` (any product `slug`) opens that bottle's pop-up directly. Back closes it.
+- **Bottle-matched background.** The gradient behind the product grid shifts to the colours of the bottle being hovered (desktop), focused (keyboard) or scrolled to the middle of the screen (phones).
+- **Analytics.** Opening a pop-up sends `view_item`. Clicking its Amazon button sends `select_item` and `amazon_click`.
+
+**To edit product details or colours, change `js/hydragear-products.js`** (copy it to `public/js/` too). Each product is keyed by its Amazon ASIN:
+
+| Field | What it does |
+|-------|--------------|
+| `amazonBullets` | The "About this item" bullets from Amazon, one string each. An empty list hides the section. |
+| `description` | Short paragraph under the price |
+| `highlights` | Feature chips |
+| `gallery` | Photos shown in the pop-up (first one is the main image) |
+| `colors` | `base`, `deep`, `accent`, `glow`: the palette used for the background and pop-up |
+
+### Homepage hero video
+
+Video files aren't stored in Git (Cloudflare Pages has a 25MB limit). The homepage hero first tries `videos/hydragear_header_2-1080p-transcode.mp4/.webm`. If those aren't deployed, it falls back to the "Wed Vid fo Hydragear" clip on Webflow's CDN. To use a different hosted video (for example Cloudflare R2 or Stream), add another `<source>` to the hero `<video>` in `index.html`.
+
 **Adding Analytics to New Pages:**
 Copy the Google Analytics code block from any existing page's `<head>` section and paste it into the new page (must be at the top of `<head>`).
 
