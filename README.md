@@ -166,7 +166,7 @@ python3 -m http.server 8000
 ### Adding New Pages
 
 1. Create HTML file in both root and `public/` directories
-2. **IMPORTANT:** Add Google Analytics tag to `<head>`:
+2. **IMPORTANT:** Add Google Analytics tag to `<head>`, plus `<link href="css/hydragear-enhance.css" rel="stylesheet">` after the Webflow CSS and `<script src="js/hydragear-enhance.js" defer></script>` before `</body>`:
    ```html
    <head>
      <!-- Google tag (gtag.js) -->
@@ -292,6 +292,31 @@ See `workers/README.md` for detailed Worker documentation.
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLRWKEKHRW"></script>
 ```
+
+### Enhancement layer (motion, scrolling, shopping)
+
+Every page also loads `css/hydragear-enhance.css` and `js/hydragear-enhance.js` (in both root and `public/`). They sit on top of the Webflow export and don't change content:
+
+- **Smooth scrolling.** Lenis inertia scrolling on desktop mouse/trackpad, native momentum on touch, header-aware smooth anchor jumps.
+- **Page transitions.** Cross-document view transitions, with a fade fallback for browsers that don't support them.
+- **Scroll reveals and a brand-gradient scroll progress bar.** Elements already animated by Webflow interactions are skipped.
+- **Shopping polish.** Product photos open the Amazon listing, hover lift and image zoom (desktop only), press feedback on touch, image-loading shimmer, Amazon preconnect on intent.
+- **`prefers-reduced-motion`** turns all of the movement off.
+
+**GA4 events sent by the enhancement script:**
+
+| Event | When |
+|-------|------|
+| `view_item_list` | Product grid scrolled into view (all items with ASIN + price) |
+| `select_item` | A product's Shop Now button or photo is clicked |
+| `amazon_click` | Any click to Amazon (product or storefront). Mark this as a **key event** in GA4 |
+| `social_click` | Instagram / TikTok / YouTube links |
+| `outbound_click` | Any other external link |
+| `contact_email_click` | `mailto:` links |
+| `sign_up` | Newsletter form submitted |
+| `generate_lead` | Contact form submitted |
+
+Amazon links use the clean `https://www.amazon.com/dp/<ASIN>` form (no search/session tracking params), which also opens the Amazon app on phones.
 
 **Adding Analytics to New Pages:**
 Copy the Google Analytics code block from any existing page's `<head>` section and paste it into the new page (must be at the top of `<head>`).
